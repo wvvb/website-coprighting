@@ -46,7 +46,23 @@ Current reviewed version: 1.1.
 
 ## Install
 
-Requirements: Git to clone the repository, and a compatible agent harness. There is no package manager step and no build.
+Requirements: a compatible agent harness. The primary route additionally needs Node.js because it runs through `npx`; the clone route needs Git. The skill itself has no build step and no runtime dependency.
+
+### Primary: skills CLI
+
+The primary install route uses the `skills` CLI, which resolves this repository from GitHub by name:
+
+```bash
+npx skills add wvvb/website-coprighting --skill website-copywriting
+```
+
+`--skill website-copywriting` selects this skill; the repository contains one skill, and without the flag the CLI prompts you to choose one. If the CLI cannot infer your harness or install scope, it also prompts for both: which agent (harness) to install into, and project-level versus global scope. Pass `-a <agent>` or `-g` to answer those up front. The CLI installs into the harnesses it supports, not every agent harness. By default it links the skill into the harness's skill directory; `--copy` copies files instead. `npx skills --help` lists the full set of options.
+
+The skills CLI collects anonymous install telemetry, which the skills.sh directory uses for its rankings. A public repository installed through the CLI can appear in that directory over time; inclusion and timing are not guaranteed, and this repository does not claim a directory listing.
+
+### Alternative: clone and wire manually
+
+Requirements: Git.
 
 1. Clone the repository to `~/Code/website-copyrighting`:
 
