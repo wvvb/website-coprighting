@@ -1,5 +1,7 @@
 # website-copyrighting
 
+[![skills.sh](https://skills.sh/b/wvvb/website-coprighting)](https://skills.sh/wvvb/website-coprighting)
+
 A reusable agent skill for auditing, rewriting, and implementing website copy. It starts from the visitor's problem and the product's mechanism, not from a feature list or a fixed page template.
 
 The skill is a plain Markdown `SKILL.md` plus a relative `references/` directory: no build step, no package manager, no runtime dependency. Harnesses that support Agent Skills can install it through their documented skill mechanism. Any other agent harness can read `SKILL.md` and open the companion files next to it. Discovery paths differ between harnesses, so this repository does not claim automatic loading everywhere.
@@ -46,23 +48,29 @@ Current reviewed version: 1.1.
 
 ## Install
 
-Requirements: a compatible agent harness. The primary route additionally needs Node.js because it runs through `npx`; the clone route needs Git. The skill itself has no build step and no runtime dependency.
+Requirements: a compatible agent harness. The CLI route runs through `npx` and needs Node.js and npm; the manual clone route needs Git only. The skill itself has no build step and no runtime dependency.
 
 ### Primary: skills CLI
 
-The primary install route uses the `skills` CLI, which resolves this repository from GitHub by name:
+The `skills` CLI resolves this repository from GitHub by name. List what the repository contains without installing anything:
+
+```bash
+npx skills add wvvb/website-coprighting --list
+```
+
+Then install the skill:
 
 ```bash
 npx skills add wvvb/website-coprighting --skill website-copywriting
 ```
 
-`--skill website-copywriting` selects this skill; the repository contains one skill, and without the flag the CLI prompts you to choose one. If the CLI cannot infer your harness or install scope, it also prompts for both: which agent (harness) to install into, and project-level versus global scope. Pass `-a <agent>` or `-g` to answer those up front. The CLI installs into the harnesses it supports, not every agent harness. By default it links the skill into the harness's skill directory; `--copy` copies files instead. `npx skills --help` lists the full set of options.
+`--skill website-copywriting` selects the repository's single skill; without it, the CLI asks you to pick one. If the CLI cannot infer your harness or install scope, it prompts for both: which supported agent (harness) to install into, and project-level versus global scope. Answer the prompts, or pass `-a <agent>` and `-g` up front. By default the CLI links the skill into the harness's skill directory; `--copy` copies files instead. `npx skills --help` lists the remaining options.
 
-The skills CLI collects anonymous install telemetry, which the skills.sh directory uses for its rankings. A public repository installed through the CLI can appear in that directory over time; inclusion and timing are not guaranteed, and this repository does not claim a directory listing.
+Loading follows the harness: select `website-copywriting` through the harness's documented skill mechanism, or let the harness match the skill's description to a request. The CLI installs only into the harnesses it supports, not every agent harness. For Pi, see the example below.
+
+The skills CLI collects anonymous install telemetry, which feeds the skills.sh directory rankings. A public repository installed through the CLI can appear in the directory over time; inclusion and timing are not guaranteed, and this repository does not claim a directory listing.
 
 ### Alternative: clone and wire manually
-
-Requirements: Git.
 
 1. Clone the repository to `~/Code/website-copyrighting`:
 
