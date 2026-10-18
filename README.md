@@ -1,6 +1,8 @@
 # website-copyrighting
 
-A Pi skill for auditing, rewriting, and implementing website copy. It starts from the visitor's problem and the product's mechanism, not from a feature list or a fixed page template.
+A reusable agent skill for auditing, rewriting, and implementing website copy. It starts from the visitor's problem and the product's mechanism, not from a feature list or a fixed page template.
+
+The skill is a plain Markdown `SKILL.md` plus a relative `references/` directory: no build step, no package manager, no runtime dependency. Harnesses that support Agent Skills can install it through their documented skill mechanism. Any other agent harness can read `SKILL.md` and open the companion files next to it. Discovery paths differ between harnesses, so this repository does not claim automatic loading everywhere.
 
 Naming note: there are three names, and they are not all spelled the same. The public GitHub repository is `wvvb/website-coprighting`. The local clone folder used in these instructions is `website-copyrighting`. The skill inside is named `website-copywriting`, which is also the invocation command. The public URL keeps the repository spelling: https://github.com/wvvb/website-coprighting
 
@@ -31,12 +33,12 @@ It does not invent pain, urgency, statistics, testimonials, or features, and it 
 ```text
 website-copyrighting/            # local clone folder
 └── website-copywriting/          # the skill
-    ├── SKILL.md                  # core instructions, loaded by Pi when relevant
+    ├── SKILL.md                  # core instructions; the entry point for any harness
     └── references/
         └── evidence.md           # companion: grades, sources, limits
 ```
 
-**Core:** `SKILL.md` holds the rules and the audit, rewrite, and implement workflows. This is what Pi loads, and what `/skill:website-copywriting` forces.
+**Core:** `SKILL.md` holds the rules and the audit, rewrite, and implement workflows. A harness with Agent Skills support can load it when a request matches its description; in Pi, `/skill:website-copywriting` forces it.
 
 **Companion:** `references/evidence.md` documents the review behind the skill: how each recommendation is classified, which sources were verified, and what remains unproven. You do not need it to use the skill. It answers the question "is this rule proven?", and it must stay next to `SKILL.md` because the skill refers to it for that.
 
@@ -44,7 +46,7 @@ Current reviewed version: 1.1.
 
 ## Install
 
-Requirements: Git and a working Pi installation. There are no other dependencies to install, no package manager step, and no build.
+Requirements: Git to clone the repository, and a compatible agent harness. There is no package manager step and no build.
 
 1. Clone the repository to `~/Code/website-copyrighting`:
 
@@ -52,7 +54,18 @@ Requirements: Git and a working Pi installation. There are no other dependencies
 git clone https://github.com/wvvb/website-coprighting ~/Code/website-copyrighting
 ```
 
-2. Check whether Pi already has a skill at the destination:
+2. Make the skill available to your agent:
+
+- Harnesses with Agent Skills support: install `website-copywriting/` through that harness's documented skill mechanism.
+- Other agent harnesses: point the agent at `website-copywriting/SKILL.md`. It can read the file directly, and `references/evidence.md` sits beside it for evidence lookups.
+
+Install locations and discovery rules differ by harness. This repository does not claim that every harness finds the skill automatically.
+
+### Pi example
+
+This is one concrete install path for the Pi harness; it is not a universal procedure.
+
+Check whether Pi already has a skill at the destination:
 
 ```bash
 ls -la ~/.pi/agent/skills/website-copywriting
@@ -67,31 +80,37 @@ ln -s ~/Code/website-copyrighting/website-copywriting ~/.pi/agent/skills/website
 
 If the destination already exists, do not overwrite it. Inspect it first, and move or remove it yourself only if you intend to replace it.
 
-3. Reload Pi so it discovers the skill and registers the command:
+Reload Pi so it discovers the skill and registers the command:
 
 ```text
 /reload
 ```
 
-Starting a new Pi session has the same effect.
+Starting a new Pi session has the same effect. Pi can also load the skill automatically when a request matches its description; `/skill:website-copywriting` forces it when you want to be sure.
 
-4. Invoke the skill with a real request:
+## Use
+
+Give the agent a real request. Two examples:
 
 ```text
-/skill:website-copywriting Audit the hero and pricing copy at https://example.com, then rewrite the headline and subhead in the current voice. Keep the product claims as they are.
+Audit the hero and pricing copy at https://example.com. Report the 3 to 5 biggest problems, quote the text, and name what already works.
 ```
 
-Pi can also load the skill automatically when a request matches its description. The `/skill:` command forces it when you want to be sure.
+```text
+Rewrite the headline and subhead in the current voice. Keep the product claims as they are.
+```
+
+In a harness with skill invocation, select `website-copywriting` first; in Pi, `/skill:website-copywriting` forces it for that request.
 
 ## Updating
 
-The symlink points into the clone, so updating is a pull plus a reload:
+Updating is a pull:
 
 ```bash
 git -C ~/Code/website-copyrighting pull
 ```
 
-Run `/reload` inside an active Pi session after the pull, or restart Pi.
+If you installed through the Pi symlink example above, run `/reload` in an active Pi session after the pull, or restart Pi. If you copied the skill directory into another harness, replace that copy after pulling.
 
 ## Notes
 
